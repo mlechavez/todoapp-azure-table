@@ -13,7 +13,7 @@ Before running the script:
 Add a `.env.local` file to the root folder and the necessary keys:
 
 REACT_APP_ENV=**development**  
-REACT_APP_TENANT_ID=**{YOUR_SAS_KEY}**  
+REACT_APP_TENANT_ID=**{YOUR_TENANT_ID}**  
 REACT_APP_CLIENT_ID=**{YOUR_CLIENT_ID}**  
 REACT_APP_REDIRECT_URI=**{YOUR_REDIRECT_URI}**  
 REACT_APP_STORAGE_ACCOUNT_NAME=**{YOUR_STORAGE_ACCOUNT_NAME}**
