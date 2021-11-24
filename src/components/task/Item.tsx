@@ -28,8 +28,10 @@ const Item = ({ onShowDetails, onComplete, onTagImportant, task }: Props) => {
   const showSteps =
     completedStepsCount !== undefined && stepsCount !== undefined;
 
-  const getSteps = () => {
-    dispatch(getStepsByIdAsync({ username: task.userId, taskId: task.id }));
+  const getSteps = async () => {
+    await dispatch(
+      getStepsByIdAsync({ username: task.userId, taskId: task.id })
+    );
   };
 
   useEffect(() => {

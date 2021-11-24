@@ -1,5 +1,3 @@
-import React from "react";
-
 import { ITask } from "../../models/task.model";
 import Item from "./Item";
 import Modal from "../ui/Modal";
@@ -37,6 +35,8 @@ const OngoingTaskList = ({ tasks }: Props) => {
   };
 
   const handleComplete = async (task: ITask) => {
+    const uncompletedSteps = task?.steps?.filter((x) => !x.completed).length;
+    if (uncompletedSteps && uncompletedSteps > 0) return;
     await dispatch(updateTaskAsync({ ...task, completed: !task.completed }));
   };
 
