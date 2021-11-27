@@ -25,17 +25,12 @@ const FormInput = ({
     if (e.key !== " " && e.code === "Enter") submitForm();
   };
 
-  const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    submitForm();
-  };
-
   return (
     <input
       {...props}
       autoFocus
       className="form-control"
       name={name}
-      onBlur={handleBlur}
       onChange={handleChange(name)}
       onKeyPress={handleKeyPress}
       placeholder={placeholder}
