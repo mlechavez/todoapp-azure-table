@@ -23,8 +23,12 @@ const setShowCompletedTasksAsync = async (uiPref: IUIPreference) => {
       userId: uiPref.userId,
       showCompletedTasks: uiPref.showCompletedTasks,
     };
+    const response = await getUiPreferenceAsync(uiPref.userId);
 
-    await client.updateEntity(uiPreferenceToUpdate, "Replace");
+    if (response && response.hasError)
+      await client.createEntity(uiPreferenceToUpdate);
+    else await client.updateEntity(uiPreferenceToUpdate, "Replace");
+
     return uiPref;
   } catch (error: any) {
     if (error.statusCode >= 500)
