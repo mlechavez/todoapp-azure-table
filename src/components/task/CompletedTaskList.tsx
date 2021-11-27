@@ -28,7 +28,6 @@ const CompletedTaskList = ({ tasks }: Props) => {
   const account = accounts[0] && accounts[0].username;
   const uiPreference = useSelector(selectUiPreference);
 
-  console.log(uiPreference);
   const handleShowDetails = (task: ITask) => {
     dispatch(setModalData(task));
     dispatch(toggleModal());
@@ -49,7 +48,7 @@ const CompletedTaskList = ({ tasks }: Props) => {
       setUiPreferenceAsync({
         showCompletedTasks: uiPreference
           ? !uiPreference?.showCompletedTasks
-          : false,
+          : true,
         userId: account,
       })
     );
