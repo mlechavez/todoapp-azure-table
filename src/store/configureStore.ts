@@ -3,11 +3,13 @@ import { useDispatch } from "react-redux";
 import modalSlice from "./modalSlice";
 import stepSlice from "./stepSlice";
 import taskSlice from "./taskSlice";
+import uiPreferenceSlice from "./uiPreferenceSlice";
 
 const reducer = combineReducers({
   tasks: taskSlice,
   steps: stepSlice,
   modal: modalSlice,
+  uiPreference: uiPreferenceSlice,
 });
 
 const store = configureStore({
