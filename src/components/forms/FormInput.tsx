@@ -8,8 +8,15 @@ type Props = {
   ref?: React.RefObject<HTMLInputElement>;
   placeholder?: string;
   type?: string;
+  [props: string]: any;
 };
-const FormInput = ({ name, ref, placeholder, type = "text" }: Props) => {
+const FormInput = ({
+  name,
+  ref,
+  placeholder,
+  type = "text",
+  ...props
+}: Props) => {
   const { handleChange, submitForm, values } = useFormikContext<
     ITask | IStep
   >();
@@ -24,6 +31,7 @@ const FormInput = ({ name, ref, placeholder, type = "text" }: Props) => {
 
   return (
     <input
+      {...props}
       autoFocus
       className="form-control"
       name={name}

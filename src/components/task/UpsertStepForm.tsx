@@ -1,20 +1,21 @@
 import React from "react";
 import * as yup from "yup";
-import { IStep } from "../../models/task.model";
+import { FormikHelpers } from "formik";
+import { MdClose } from "react-icons/md";
 
+import { IStep } from "../../models/task.model";
 import { useAppDispatch } from "../../store/configureStore";
 import FormInput from "../forms/FormInput";
 import Form from "../forms/Form";
 import { Content, HorizontalCard } from "./styles";
-import { FormikHelpers } from "formik";
 import CheckToggler from "../ui/CheckToggler";
-import { MdClose } from "react-icons/md";
 import {
   createStepAsync,
   deleteStepAsync,
   updateStepsAsync,
 } from "../../store/stepSlice";
 import { getStepsByIdAsync } from "../../store/taskSlice";
+import { ITask } from "../../models/task.model";
 
 const schema = yup.object().shape({
   description: yup.string().required().min(3).label("Description"),
@@ -24,10 +25,15 @@ type Props = {
   step: IStep;
   currentSteps: IStep[];
   setCurrentSteps: React.Dispatch<React.SetStateAction<IStep[]>>;
+  task: ITask;
 };
-const UpsertStepForm = ({ step, currentSteps, setCurrentSteps }: Props) => {
+const UpsertStepForm = ({
+  step,
+  currentSteps,
+  setCurrentSteps,
+  task,
+}: Props) => {
   const dispatch = useAppDispatch();
-
   const initialValues: IStep = {
     id: step.id,
     userId: step.userId,
@@ -51,6 +57,7 @@ const UpsertStepForm = ({ step, currentSteps, setCurrentSteps }: Props) => {
   };
 
   const handleComplete = async () => {
+    if (task.completed) return;
     await dispatch(updateStepsAsync({ ...step!, completed: !step?.completed }));
     // fetch the updated completed count in the Item card
     await dispatch(
@@ -89,7 +96,11 @@ const UpsertStepForm = ({ step, currentSteps, setCurrentSteps }: Props) => {
           />
         </Content>
         <Content flexGrow="1">
-          <FormInput name="description" placeholder="Add a new step..." />
+          <FormInput
+            name="description"
+            placeholder="Add a new step..."
+            readOnly={task.completed ? true : false}
+          />
         </Content>
         <MdClose cursor="pointer" onClick={() => handleDelete(step)} />
       </HorizontalCard>
