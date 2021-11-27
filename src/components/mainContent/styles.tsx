@@ -46,9 +46,18 @@ export const ModalWrapper = styled(ItemWrapper)`
 export const ModalHeader = styled(ItemWrapper)`
   display: flex;
   border-bottom: 1px solid lightgray;
+  gap: 10px;
   padding: 5px 15px;
-  h3 {
+
+  div:first-child {
+    align-items: center;
     flex: 1 1 auto;
+    display: flex;
+    gap: 8px;
+    h5,
+    input {
+      flex: 1 1 auto;
+    }
   }
   .close {
     margin-top: 10px;

@@ -56,7 +56,7 @@ const Modal = ({ body, footer, heading, title }: Props) => {
           tabIndex={-1}
         >
           <ModalHeader>
-            {heading}
+            <div>{heading}</div>
             <MdClose
               onClick={() => dispatch(toggleModal())}
               className="close"
