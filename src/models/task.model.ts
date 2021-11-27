@@ -1,3 +1,5 @@
+import { IEntityBase } from "./base.model";
+
 export interface ITask {
   id: string;
   userId: string;
@@ -19,11 +21,6 @@ export interface IStep {
   completed?: boolean;
 }
 
-export interface ITaskEntityBase {
-  partitionKey: string;
-  rowKey: string;
-}
+export interface ITaskEntity extends IEntityBase, ITask {}
 
-export interface ITaskEntity extends ITaskEntityBase, ITask {}
-
-export interface IStepEntity extends ITaskEntityBase, IStep {}
+export interface IStepEntity extends IEntityBase, IStep {}

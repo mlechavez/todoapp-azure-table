@@ -1,4 +1,6 @@
-import { useState } from "react";
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
+import { useMsal } from "@azure/msal-react";
 
 import { ITask } from "../../models/task.model";
 import { useAppDispatch } from "../../store/configureStore";
@@ -10,6 +12,11 @@ import {
   setShowFooter,
   toggleModal,
 } from "../../store/modalSlice";
+import {
+  getUiPreferenceAsync,
+  selectUiPreference,
+  setUiPreferenceAsync,
+} from "../../store/uiPreferenceSlice";
 
 type Props = {
   tasks: ITask[];
@@ -17,8 +24,11 @@ type Props = {
 
 const CompletedTaskList = ({ tasks }: Props) => {
   const dispatch = useAppDispatch();
-  const [showCompleted, setShowCompleted] = useState(true);
+  const { accounts } = useMsal();
+  const account = accounts[0] && accounts[0].username;
+  const uiPreference = useSelector(selectUiPreference);
 
+  console.log(uiPreference);
   const handleShowDetails = (task: ITask) => {
     dispatch(setModalData(task));
     dispatch(toggleModal());
@@ -34,16 +44,36 @@ const CompletedTaskList = ({ tasks }: Props) => {
     await dispatch(updateTaskAsync({ ...task, important: !task.important }));
   };
 
+  const handleCompletedToggle = async () => {
+    await dispatch(
+      setUiPreferenceAsync({
+        showCompletedTasks: uiPreference
+          ? !uiPreference?.showCompletedTasks
+          : false,
+        userId: account,
+      })
+    );
+  };
+
+  const getUiPreference = async () => {
+    await dispatch(getUiPreferenceAsync(account));
+  };
+
+  useEffect(() => {
+    getUiPreference();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <>
       {tasks.length > 0 && (
         <ChevronToggler
-          show={showCompleted}
-          onToggle={() => setShowCompleted(!showCompleted)}
+          show={uiPreference?.showCompletedTasks || false}
+          onToggle={handleCompletedToggle}
         />
       )}
 
-      {showCompleted &&
+      {uiPreference?.showCompletedTasks &&
         tasks.map((task, index) => (
           <Item
             key={`${task.id}-${index}`}
