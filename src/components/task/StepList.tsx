@@ -19,6 +19,8 @@ const StepList = ({ task }: Props) => {
   }, [steps]);
 
   const handleAdd = () => {
+    if (task.completed) return;
+
     const existingEmptyStep = currentSteps.filter((step) => step.id === "");
     if (existingEmptyStep.length) return;
 
@@ -47,6 +49,7 @@ const StepList = ({ task }: Props) => {
           step={step}
           currentSteps={currentSteps}
           setCurrentSteps={setCurrentSteps}
+          task={task}
         />
       ))}
     </>
