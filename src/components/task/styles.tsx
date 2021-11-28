@@ -105,6 +105,11 @@ export const ButtonContainer = styled(ItemWrapper)`
   color: var(--main-color);
   display: flex;
   gap: 5px;
-  padding: 10px;
+  padding-top: ${(props) => (props.paddingTop ? props.paddingTop : `10px`)};
+  padding-bottom: ${(props) =>
+    props.paddingBottom ? props.paddingBottom : `10px`};
+  padding-left: ${(props) => (props.paddingLeft ? props.paddingLeft : `10px`)};
+  padding-right: ${(props) =>
+    props.paddingRight ? props.paddingRight : `10px`};
   cursor: pointer;
 `;
