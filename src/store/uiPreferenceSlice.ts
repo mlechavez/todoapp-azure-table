@@ -25,9 +25,8 @@ export const getUiPreferenceAsync = createAsyncThunk(
 export const setUiPreferenceAsync = createAsyncThunk(
   "uiPreference/setUIPreferenceAsync",
   async (payload: IUIPreference, { rejectWithValue }) => {
-    const response: any = await uiPreferenceService.setShowCompletedTasksAsync(
-      payload
-    );
+    const response: any =
+      await uiPreferenceService.updateUIPreferenceTasksAsync(payload);
     if (response && response.hasError) return rejectWithValue(response.message);
     return payload;
   }

@@ -15,7 +15,7 @@ const credentials = new InteractiveBrowserCredential({
 
 const client = new TableClient(endpoint, tableName, credentials);
 
-const setShowCompletedTasksAsync = async (uiPref: IUIPreference) => {
+const updateUIPreferenceTasksAsync = async (uiPref: IUIPreference) => {
   try {
     const uiPreferenceToUpdate: IUIPreferenceEntity = {
       partitionKey,
@@ -57,7 +57,7 @@ const getUiPreferenceAsync = async (userId: string) => {
 
 const uiPreferenceService = {
   getUiPreferenceAsync,
-  setShowCompletedTasksAsync,
+  updateUIPreferenceTasksAsync,
 };
 
 export default uiPreferenceService;

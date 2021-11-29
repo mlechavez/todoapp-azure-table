@@ -25,21 +25,11 @@ export const createStepAsync = createAsyncThunk(
 export const getStepsAsync = createAsyncThunk(
   "step/getStepsAsync",
   async (payload: { username: string; taskId: string }) => {
-    const entityList = stepService.getSteps(payload.username, payload.taskId);
-
-    const items: IStep[] = [];
-
-    for await (const step of entityList) {
-      items.push({
-        id: step.rowKey!,
-        userId: step.userId,
-        type: step.type,
-        description: step.description,
-        completed: step.completed,
-        taskId: step.taskId,
-      });
-    }
-    return items;
+    const entityList = stepService.getStepsAsync(
+      payload.username,
+      payload.taskId
+    );
+    return entityList;
   }
 );
 

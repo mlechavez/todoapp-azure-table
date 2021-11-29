@@ -21,7 +21,6 @@ const initialValues: ITask = {
   type: "",
   description: "",
   completed: false,
-  myDay: false,
   important: false,
   note: "",
 };
@@ -44,7 +43,6 @@ const AddTaskForm = () => {
         type: "",
         description: "",
         completed: false,
-        myDay: false,
         important: false,
         note: "",
       },
