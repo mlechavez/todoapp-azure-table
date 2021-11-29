@@ -29,31 +29,13 @@ export const createTaskAsync = createAsyncThunk(
 
 export const getTasksAsync = createAsyncThunk(
   "task/getTasksAsync",
-  async (username: string, { rejectWithValue }) => {
-    const entityList = taskService.getTasks(username);
+  async (payload: string, { rejectWithValue }) => {
+    const entityList = taskService.getTasksAsync(payload);
 
-    const items: ITask[] = [];
-
-    try {
-      for await (const task of entityList) {
-        items.push({
-          id: task.rowKey!,
-          userId: task.userId,
-          type: task.type,
-          description: task.description,
-          completed: task.completed,
-          myDay: task.myDay,
-          important: task.important,
-        });
-      }
-    } catch (error: any) {
-      return rejectWithValue(
-        error.response?.parsedBody?.odataError?.message?.value
-      );
-    }
-    return items;
+    return entityList;
   }
 );
+
 export const deleteTaskAsync = createAsyncThunk(
   "task/deleteTaskAsync",
   async (payload: string, { dispatch, rejectWithValue }) => {
@@ -86,19 +68,7 @@ export const getStepsByIdAsync = createAsyncThunk(
       payload.taskId
     );
 
-    const items: IStep[] = [];
-
-    for await (const step of entityList) {
-      items.push({
-        id: step.rowKey!,
-        userId: step.userId,
-        type: step.type,
-        description: step.description,
-        completed: step.completed,
-        taskId: step.taskId,
-      });
-    }
-    return items;
+    return entityList;
   }
 );
 
@@ -157,7 +127,6 @@ const slice = createSlice({
     ) => {
       state.loading = false;
       state.error = action.payload;
-      // action.payload?.response?.parsedBody?.odataError?.message?.value;
     },
     [deleteTaskAsync.pending.toString()]: (state: TaskState) => {
       state.loading = true;
@@ -188,17 +157,19 @@ const slice = createSlice({
     ) => {
       state.loading = false;
       state.error = "";
+
       const index = state.tasks.findIndex(
         (task) => task.id === action.payload.id
       );
+
       if (index < 0) return;
       state.tasks[index].id = action.payload.id;
       state.tasks[index].type = action.payload.type;
       state.tasks[index].description = action.payload.description;
       state.tasks[index].completed = action.payload.completed;
-      state.tasks[index].myDay = action.payload.myDay;
       state.tasks[index].important = action.payload.important;
       state.tasks[index].note = action.payload.note;
+      state.tasks[index].myDayEndDate = action.payload.myDayEndDate;
     },
     [updateTaskAsync.rejected.toString()]: (
       state: TaskState,
@@ -251,12 +222,16 @@ export const selectCompletedTasks = createSelector(
 export const selectMydayTasks = createSelector(
   [tasksSelector],
   (state: TaskState) =>
-    state.tasks.filter((task) => task.myDay && !task.completed)
+    state.tasks.filter(
+      (task) => !task.completed && task?.myDayEndDate! >= Date.now()
+    )
 );
 export const selectCompletedMydayTasks = createSelector(
   [tasksSelector],
   (state: TaskState) =>
-    state.tasks.filter((task) => task.myDay && task.completed)
+    state.tasks.filter(
+      (task) => task.completed && task?.myDayEndDate! >= Date.now()
+    )
 );
 export const selectImportantTasks = createSelector(
   [tasksSelector],
@@ -271,7 +246,9 @@ export const selectCompletedImportantTasks = createSelector(
 export const selectMyDayTasksCount = createSelector(
   [tasksSelector],
   (state: TaskState) =>
-    state.tasks.filter((task) => task.myDay && !task.completed).length
+    state.tasks.filter(
+      (task) => !task.completed && task?.myDayEndDate! >= Date.now()
+    ).length
 );
 
 export const selectImportantTasksCount = createSelector(

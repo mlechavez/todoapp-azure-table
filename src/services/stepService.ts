@@ -37,7 +37,7 @@ const createStepAsync = async (step: IStep) => {
   }
 };
 
-const getSteps = (username: string, taskId: string) => {
+const getStepsAsync = async (username: string, taskId: string) => {
   const lowerValue = `${username}_${taskId}_${"0".padStart(13, "0")}`;
   const higherValue = `${username}_${taskId}_${Date.now().toString()}`;
   const filter = odata`PartitionKey eq ${partitionKey} and RowKey ge ${lowerValue} and RowKey le ${higherValue}`;
@@ -46,7 +46,20 @@ const getSteps = (username: string, taskId: string) => {
       filter,
     },
   });
-  return result;
+
+  const items: IStep[] = [];
+
+  for await (const step of result) {
+    items.push({
+      id: step.rowKey!,
+      userId: step.userId,
+      type: step.type,
+      description: step.description,
+      completed: step.completed,
+      taskId: step.taskId,
+    });
+  }
+  return items;
 };
 
 const updateStepAsync = async (step: IStep) => {
@@ -78,7 +91,7 @@ const deleteStepAsync = async (id: string) => {
 
 const stepService = {
   createStepAsync,
-  getSteps,
+  getStepsAsync,
   updateStepAsync,
   deleteStepAsync,
 };

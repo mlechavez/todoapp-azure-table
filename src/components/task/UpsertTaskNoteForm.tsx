@@ -25,7 +25,6 @@ const UpsertTaskNoteForm = ({ task }: Props) => {
     type: task.type,
     description: task.description,
     completed: task.completed,
-    myDay: task.myDay,
     important: task.important,
     note: task.note,
   };

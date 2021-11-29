@@ -6,10 +6,10 @@ export interface ITask {
   type: string;
   description?: string;
   completed: boolean;
-  myDay: boolean;
   important: boolean;
   note?: string;
   steps?: IStep[];
+  myDayEndDate?: number;
 }
 
 export interface IStep {

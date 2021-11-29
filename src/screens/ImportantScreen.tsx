@@ -1,8 +1,7 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useMsal } from "@azure/msal-react";
 
-// import AddTaskForm from "../components/task/AddTaskForm";
 import CompletedTaskList from "../components/task/CompletedTaskList";
 import { Container, Section } from "../components/task/styles";
 import OngoingTaskList from "../components/task/OngoingTaskList";
